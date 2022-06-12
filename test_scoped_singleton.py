@@ -1,13 +1,12 @@
 import gc
-from dataclasses import dataclass
 
 from scoped_singleton import scoped_singleton
 
 
 @scoped_singleton
-@dataclass
 class Account:
-    uuid: str
+    def __init__(self, uuid):
+        self.uuid = uuid
 
 
 def test_scoped_singleton():
