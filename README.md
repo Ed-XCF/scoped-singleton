@@ -1,4 +1,4 @@
-# redis-property
+# scoped-singleton
 ![GitHub](https://img.shields.io/github/license/Ed-XCF/scoped-singleton)
 [![Build Status](https://app.travis-ci.com/Ed-XCF/redis-property.svg?branch=main)](https://app.travis-ci.com/Ed-XCF/scoped-singleton)
 [![codecov](https://codecov.io/gh/Ed-XCF/scoped-singleton/branch/main/graph/badge.svg?token=J3HnAigB4J)](undefined)
