@@ -1,10 +1,24 @@
 import hashlib
+import threading
 from weakref import WeakValueDictionary
 from urllib.parse import quote
 
 
+class ScopedRegistry(threading.local):
+    registry = WeakValueDictionary()
+
+    def __contains__(self, key):
+        return key in self.registry
+
+    def __getitem__(self, item):
+        return self.registry[item]
+
+    def __setitem__(self, key, value):
+        self.registry[key] = value
+
+
 def scoped_singleton(cls):
-    _registry = WeakValueDictionary()
+    _registry = ScopedRegistry()
 
     def wrap(*args, **kwargs):
         quote_args = [quote(str(i)) for i in args]
