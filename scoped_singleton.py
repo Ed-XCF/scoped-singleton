@@ -1,11 +1,11 @@
+import contextvars  # noqa
 import hashlib
 import threading
-import contextvars  # noqa
-from weakref import WeakValueDictionary
-from urllib.parse import quote
-from functools import partial
 from abc import ABCMeta, abstractmethod
+from functools import partial
 from typing import Type
+from urllib.parse import quote
+from weakref import WeakValueDictionary
 
 __all__ = [
     "thread_scoped_singleton",
@@ -44,8 +44,10 @@ class ThreadLocalRegistry(Registry):
 
 class ContextVarRegistry(Registry):
     def __init__(self):
-        self.scope = contextvars.ContextVar(type(self).__name__)
-        self.scope.set(WeakValueDictionary())
+        self.scope = contextvars.ContextVar(
+            type(self).__name__,
+            default=WeakValueDictionary(),
+        )
 
     def __contains__(self, key):
         return key in self.scope.get()
