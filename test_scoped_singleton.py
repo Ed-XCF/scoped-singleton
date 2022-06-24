@@ -25,8 +25,6 @@ def test_context_scoped_singleton():
     gc.collect()
     e, f = Account(uuid="456"), Account(uuid="123")
     assert f is not c
-    id_f = id(f)
-    assert id_f != id_d
 
 
 def test_thread_scoped_singleton():
@@ -51,5 +49,3 @@ def test_thread_scoped_singleton():
     gc.collect()
     e, f = Account(uuid="456"), Account(uuid="123")
     assert f is not c
-    id_f = id(f)
-    assert id_f != id_d
