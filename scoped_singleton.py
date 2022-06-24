@@ -1,6 +1,6 @@
 import hashlib
 import threading
-import contextvars
+import contextvars  # noqa
 from weakref import WeakValueDictionary
 from urllib.parse import quote
 from functools import partial
@@ -9,7 +9,7 @@ from typing import Type
 
 __all__ = [
     "thread_scoped_singleton",
-    "async_scoped_singleton",
+    "context_scoped_singleton",
 ]
 
 
@@ -27,7 +27,7 @@ class Registry(metaclass=ABCMeta):
         raise NotImplementedError
 
 
-class ThreadRegistry(Registry):
+class ThreadLocalRegistry(Registry):
     def __init__(self):
         self.scope = threading.local()
         self.scope.registry = WeakValueDictionary()
@@ -42,7 +42,7 @@ class ThreadRegistry(Registry):
         self.scope.registry[key] = value
 
 
-class AsyncRegistry(Registry):
+class ContextVarRegistry(Registry):
     def __init__(self):
         self.scope = contextvars.ContextVar(type(self).__name__)
         self.scope.set(WeakValueDictionary())
@@ -76,5 +76,5 @@ def scoped_singleton(registry_klass: Type[Registry], cls):
     return wrap
 
 
-thread_scoped_singleton = partial(scoped_singleton, ThreadRegistry)
-async_scoped_singleton = partial(scoped_singleton, AsyncRegistry)
+thread_scoped_singleton = partial(scoped_singleton, ThreadLocalRegistry)
+context_scoped_singleton = partial(scoped_singleton, ContextVarRegistry)

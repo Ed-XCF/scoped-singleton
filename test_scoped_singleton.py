@@ -6,7 +6,7 @@ from scoped_singleton import *
 def test_async_scoped_singleton():
     gc.collect()
 
-    @async_scoped_singleton
+    @context_scoped_singleton
     class Account:
         def __init__(self, uuid):
             self.uuid = uuid
