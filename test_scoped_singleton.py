@@ -3,7 +3,7 @@ import gc
 from scoped_singleton import *
 
 
-def test_async_scoped_singleton():
+def test_context_scoped_singleton():
     gc.collect()
 
     @context_scoped_singleton
