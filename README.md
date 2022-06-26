@@ -15,10 +15,10 @@ pip3 install scoped-singleton
 ```python
 from dataclasses import dataclass
 
-from scoped_singleton import thread_scoped_singleton
+from scoped_singleton import context_scoped_singleton
 
 
-@thread_scoped_singleton
+@context_scoped_singleton
 @dataclass
 class Account:
     uuid: str
@@ -30,10 +30,10 @@ use it with cached_property to stop repeated requests
 from dataclasses import dataclass
 
 from cached_property import cached_property
-from scoped_singleton import thread_scoped_singleton
+from scoped_singleton import context_scoped_singleton
 
 
-@thread_scoped_singleton
+@context_scoped_singleton
 @dataclass
 class Account:
     uuid: str
