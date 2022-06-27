@@ -30,16 +30,19 @@ class Registry(metaclass=ABCMeta):
 class ThreadLocalRegistry(Registry):
     def __init__(self):
         self.scope = threading.local()
-        self.scope.registry = WeakValueDictionary()
+        self.registry_factory = WeakValueDictionary
 
     def __contains__(self, key):
-        return key in self.scope.registry
+        return key in getattr(self.scope, "registry", {})
 
     def __getitem__(self, item):
-        return self.scope.registry[item]
+        return getattr(self.scope, "registry", {}).get(item)
 
     def __setitem__(self, key, value):
-        self.scope.registry[key] = value
+        old_registry = getattr(self.scope, "registry", None)
+        new_registry = old_registry.copy() if old_registry else self.registry_factory()
+        new_registry[key] = value
+        self.scope.registry = new_registry
 
 
 class ContextVarRegistry(Registry):
@@ -56,7 +59,9 @@ class ContextVarRegistry(Registry):
         return self.scope.get()[item]
 
     def __setitem__(self, key, value):
-        self.scope.get()[key] = value
+        new_registry = self.scope.get().copy()
+        new_registry[key] = value
+        self.scope.set(new_registry)
 
 
 def scoped_singleton(registry_klass: Type[Registry], cls):
